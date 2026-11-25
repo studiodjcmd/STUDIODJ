@@ -17,6 +17,9 @@ jobs:
       - run: node --check controller/baseline/Numark-NS6-Original.js
       - run: node --test tests/mapping.test.cjs
       - run: python tests/validate_skin.py
+      - run: node --check controller/studio/Studio-NS6-UI.js
+      - run: node --test tests/studio_overlay.test.cjs
+      - run: python tests/validate_bundle.py
   native-smoke:
     needs: static
     runs-on: ubuntu-24.04
@@ -45,9 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          mkdir -p dist
-          cd skin
-          zip -r ../dist/StudioDJ-alpha.zip StudioDJ
+          python tools/build_alpha.py --out dist/bundle --zip dist/StudioDJ-alpha.zip
       - uses: actions/upload-artifact@v4
         with:
           name: StudioDJ-alpha
