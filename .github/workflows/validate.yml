@@ -1,0 +1,19 @@
+name: Validate baseline and skin
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python tests/validate_mapping.py
+      - run: node --check controller/baseline/Numark-NS6-Original.js
+      - run: node --test tests/mapping.test.cjs
+      - run: python tests/validate_skin.py

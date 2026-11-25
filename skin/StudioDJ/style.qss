@@ -1,0 +1,21 @@
+QWidget { background-color:#101012; color:#F5F5F7; font-size:13px; font-family:"Geist Sans","Segoe UI","Noto Sans",sans-serif; }
+#Toolbar { background-color:#17171A; }
+#Brand QLabel { font-size:22px; font-weight:600; }
+#DeckCard { background-color:#1D1D20; border:1px solid #36363B; border-radius:9px; }
+#DeckCard QLabel { background:transparent; border:0; }
+#TrackTitle QLabel { font-size:21px; font-weight:600; }
+#Artist QLabel, #Caption QLabel { color:#A1A1AA; }
+#Bpm QLabel { font-size:32px; font-weight:600; }
+#Metric QLabel { font-size:20px; }
+#DeckLabel1 QLabel { color:#0A84FF; font-weight:600; }
+#DeckLabel2 QLabel { color:#FF9F0A; font-weight:600; }
+#DeckLabel3 QLabel { color:#BF5AF2; font-weight:600; }
+#DeckLabel4 QLabel { color:#64D2FF; font-weight:600; }
+#Layer QLabel { color:#F5F5F7; font-weight:600; }
+#Status QLabel { color:#77777F; }
+#Status[highlight="1"] QLabel { color:#30D158; font-weight:600; }
+#ModeButton { background:#28282D; border:1px solid #36363B; border-radius:7px; }
+QLineEdit { background:#242428; border:1px solid #36363B; border-radius:7px; padding:6px; }
+QTableView,QTreeView { background:#161618; alternate-background-color:#1D1D20; selection-background-color:#244B79; gridline-color:#26262A; border:0; }
+QHeaderView::section { background:#212124; color:#A1A1AA; padding:6px; border:0; }
+QSplitter::handle { background:#36363B; }
