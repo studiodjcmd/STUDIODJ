@@ -14,7 +14,7 @@ export JACK_NO_START_SERVER=1
 mkdir -p "$HOME/Music" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_RUNTIME_DIR" "$profile/settings/skins"
 chmod 700 "$XDG_RUNTIME_DIR"
 cp -r "$root/skin/StudioDJ" "$profile/settings/skins/"
-printf '[Config]\nResizableSkin StudioDJ\n[Playlist]\nDirectory %s\n' "$HOME/Music" > "$profile/settings/mixxx.cfg"
+printf '[Config]\nResizableSkin StudioDJ\nshow_menubar_hint 0\nhide_menubar 1\nStartInFullscreen 1\n[Playlist]\nDirectory %s\n' "$HOME/Music" > "$profile/settings/mixxx.cfg"
 cat > "$HOME/.asoundrc" <<'EOF'
 pcm.!default {
   type null
@@ -83,6 +83,7 @@ sleep 3
 kill -0 "$pid"
 xdotool search --onlyvisible --name '^Mixxx' > "$out/windows.txt"
 if xdotool search --onlyvisible --name '^Choose music library directory$' >/dev/null 2>&1; then exit 1; fi
+if xdotool search --onlyvisible --name 'Allow Mixxx to hide the menu bar' >/dev/null 2>&1; then echo 'Unexpected menu hint modal'; exit 1; fi
 import -window root "$out/player.png"
 if grep -Ei 'StudioDJ/.*(unknown widget|could not parse|failed to parse|invalid control|unrecognized widget)|Failed to load skin|Error loading skin|Segmentation fault' "$out/stdout.log" "$profile/settings/mixxx.log"; then exit 1; fi
 echo "PASS: candidate loaded and remained alive on a virtual display (not hardware/audio validation)"
