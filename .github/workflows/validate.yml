@@ -1,5 +1,5 @@
 name: Validate baseline and skin
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
 jobs:
@@ -17,3 +17,38 @@ jobs:
       - run: node --check controller/baseline/Numark-NS6-Original.js
       - run: node --test tests/mapping.test.cjs
       - run: python tests/validate_skin.py
+  native-smoke:
+    needs: static
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Mixxx from official stable PPA
+        shell: bash
+        run: |
+          sudo add-apt-repository -y ppa:mixxx/mixxx
+          sudo apt-get update
+          version=$(apt-cache madison mixxx | awk '$3 ~ /(^|:)2[.]5[.]6([+~.-]|$)/ {print $3; exit}')
+          test -n "$version"
+          sudo apt-get install -y "mixxx=$version" xvfb xdotool imagemagick libgl1-mesa-dri
+          dpkg-query -W mixxx
+      - name: Load actual native skin
+        run: xvfb-run -a -s "-screen 0 1366x768x24 +extension GLX" bash tests/smoke_mixxx.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-smoke-results
+          path: smoke-results/
+  candidate:
+    needs: [static, native-smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p dist
+          cd skin
+          zip -r ../dist/StudioDJ-alpha.zip StudioDJ
+      - uses: actions/upload-artifact@v4
+        with:
+          name: StudioDJ-alpha
+          path: dist/StudioDJ-alpha.zip

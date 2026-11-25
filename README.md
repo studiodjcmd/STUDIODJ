@@ -1,19 +1,13 @@
-# Studio DJ — v0.0.1 development
+# Studio DJ — 0.0.2 alpha candidate
 
-Hardware-first native Mixxx 2.5.6 experience for the original Numark NS6. This is an experimental skin, not a standalone application or a live-ready release.
+Native Mixxx 2.5.6 skin for the original Numark NS6. Not a standalone player. Keep the baseline controller files unchanged.
 
-## Try the native Player prototype
-Close Mixxx. Copy `skin/StudioDJ` into the `skins` directory in your Mixxx settings folder (Windows: `%LOCALAPPDATA%\Mixxx\skins`; Linux: `~/.mixxx/skins`). Select Studio DJ in Preferences > Interface. Keep your known-good controller mapping and audio setup. Restore your previous skin if the prototype fails. Test at low volume, never first during a live set.
+## Test readiness
+The GitHub Actions workflow runs static tests, then launches real Mixxx 2.5.6 using a temporary profile and virtual display. It only produces the skin-only candidate ZIP if both jobs succeed. The runtime smoke test does not certify audio, physical hardware, render quality, or four-hour stability. Review the screenshot/log artifact before installation.
 
-Player shows all four decks' metadata and active states; the additional waveform pair is optional. Browse hides the detailed waveforms without hiding deck status. No virtual mixer or new audio engine. Existing NS6 bridge controls are declared in the skin; behavior needs runtime and hardware validation. FX status and Tag List are subsequent work.
+## Installation (after smoke and review)
+Close Mixxx. Copy StudioDJ into the user settings skins directory (Windows: %LOCALAPPDATA%\\Mixxx\\skins; Linux: ~/.mixxx/skins). Select Studio DJ in Preferences > Interface. Back up your settings. Keep stock mapping or your known-good original NS6 mapping. Return to stock skin if needed. Do not test live.
 
-## Development
-```sh
-python tests/validate_mapping.py
-node --check controller/baseline/Numark-NS6-Original.js
-node --test tests/mapping.test.cjs
-python tests/validate_skin.py
-```
-The first three checks validate the immutable supplied baseline (not hardware). The fourth checks XML structure and declared connections, not the Mixxx renderer. See docs/HARDWARE-TESTS.md.
+Four deck metadata/overviews, two active-layer or four scrolling waveforms, native library, preview, compact FX routing and meters. VIEW toggles waveform layout, PREPARE toggles Browse on the supplied baseline. CRATES/FILES focus library; the baseline retains LOAD PREPARE -> Auto DJ queue and SHIFT+encoder -> Auto DJ toggle, so DO NOT use either during tests. Tag List is not implemented. Layer sync depends on baseline mapping and initialization; verify after connecting.
 
-Mapping redistribution rights must be verified before public release. Do not ship proprietary drivers or fonts.
+No performance claims without benchmarks. No public distribution of baseline mapping until licensing verified.
