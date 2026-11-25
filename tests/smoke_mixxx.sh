@@ -55,107 +55,34 @@ done
 jack_lsp
 mixxx --settingsPath "$profile/settings" --developer --logLevel debug --logFlushLevel debug > "$out/stdout.log" 2>&1 &
 pid=$!
+loaded() {
+  grep -Eq 'Loaded skin "Studio ?DJ" from .*[/]StudioDJ' "$out/stdout.log" "$profile/settings/mixxx.log" 2>/dev/null
+}
 for i in $(seq 1 90); do
   kill -0 "$pid" || { cat "$out/stdout.log"; exit 1; }
-  # A fresh Mixxx database may prompt despite the configured directory.
-  # Handle only that exact, expected dialog, never dismiss an unknown error.
-  dialog=$(xdotool search --onlyvisible --name '^Choose music library directory
+  dialog=$(xdotool search --onlyvisible --name '^Choose music library directory$' 2>/dev/null | head -1 || true)
+  if [[ -n "$dialog" ]]; then
+    echo "Selecting isolated test library: $HOME/Music"
+    xdotool windowfocus --sync "$dialog"
+    xdotool key ctrl+l
+    xdotool type --clearmodifiers "$HOME/Music"
+    xdotool key Return
+    sleep 1
+    if xdotool search --onlyvisible --name '^Choose music library directory$' >/dev/null 2>&1; then
+      xdotool key Return
+    fi
+  fi
+  if loaded; then break; fi
   if [[ "$i" == 10 || "$i" == 25 ]]; then
     xdotool search --onlyvisible --name ".*" getwindowname %@ || true
   fi
   sleep 1
 done
-grep -Ei 'Loaded skin "Studio ?DJ" from .*[/\\]StudioDJ' "$out/stdout.log" "$profile/settings/mixxx.log"
+loaded
 sleep 3
 kill -0 "$pid"
 xdotool search --onlyvisible --name '^Mixxx' > "$out/windows.txt"
-if xdotool search --onlyvisible --name '^Choose music library directory
+if xdotool search --onlyvisible --name '^Choose music library directory$' >/dev/null 2>&1; then exit 1; fi
 import -window root "$out/player.png"
-# Reject actual skin parser errors; keep the full log for review.
-if grep -Ei 'StudioDJ/.*(unknown widget|could not parse|failed to parse|invalid control|unrecognized widget)|Failed to load skin|Error loading skin|Segmentation fault' "$out/stdout.log" "$profile/settings/mixxx.log"; then exit 1; fi
-echo "PASS: candidate loaded and remained alive on a virtual display (not hardware/audio validation)"
- 2>/dev/null | head -1 || true)
-  if [[ -n "$dialog" ]]; then
-    echo "Selecting isolated test library: $HOME/Music"
-    xdotool windowfocus --sync "$dialog"
-    xdotool key --window "$dialog" ctrl+l
-    xdotool type --window "$dialog" --clearmodifiers "$HOME/Music"
-    xdotool key --window "$dialog" Return
-    sleep 1
-    if xdotool search --onlyvisible --name '^Choose music library directory
-  if [[ "$i" == 10 || "$i" == 25 ]]; then
-    xdotool search --onlyvisible --name ".*" getwindowname %@ || true
-  fi
-  sleep 1
-done
-grep -Ei 'Loaded skin "?Studio ?DJ"?' "$out/stdout.log" "$profile/settings/mixxx.log"
-sleep 3
-kill -0 "$pid"
-xdotool search --onlyvisible --name 'Mixxx' > "$out/windows.txt"
-import -window root "$out/player.png"
-# Reject actual skin parser errors; keep the full log for review.
-if grep -Ei 'StudioDJ/.*(unknown widget|could not parse|failed to parse|invalid control|unrecognized widget)|Failed to load skin|Error loading skin|Segmentation fault' "$out/stdout.log" "$profile/settings/mixxx.log"; then exit 1; fi
-echo "PASS: candidate loaded and remained alive on a virtual display (not hardware/audio validation)"
- >/dev/null 2>&1; then
-      xdotool key --window "$dialog" Return
-    fi
-  fi
-  if grep -Ei 'Loaded skin "Studio ?DJ" from .*[/\\]StudioDJ' "$out/stdout.log" "$profile/settings/mixxx.log" 2>/dev/null; then break; fi
-  if [[ "$i" == 10 || "$i" == 25 ]]; then
-    xdotool search --onlyvisible --name ".*" getwindowname %@ || true
-  fi
-  sleep 1
-done
-grep -Ei 'Loaded skin "?Studio ?DJ"?' "$out/stdout.log" "$profile/settings/mixxx.log"
-sleep 3
-kill -0 "$pid"
-xdotool search --onlyvisible --name 'Mixxx' > "$out/windows.txt"
-import -window root "$out/player.png"
-# Reject actual skin parser errors; keep the full log for review.
-if grep -Ei 'StudioDJ/.*(unknown widget|could not parse|failed to parse|invalid control|unrecognized widget)|Failed to load skin|Error loading skin|Segmentation fault' "$out/stdout.log" "$profile/settings/mixxx.log"; then exit 1; fi
-echo "PASS: candidate loaded and remained alive on a virtual display (not hardware/audio validation)"
- >/dev/null 2>&1; then exit 1; fi
-import -window root "$out/player.png"
-# Reject actual skin parser errors; keep the full log for review.
-if grep -Ei 'StudioDJ/.*(unknown widget|could not parse|failed to parse|invalid control|unrecognized widget)|Failed to load skin|Error loading skin|Segmentation fault' "$out/stdout.log" "$profile/settings/mixxx.log"; then exit 1; fi
-echo "PASS: candidate loaded and remained alive on a virtual display (not hardware/audio validation)"
- 2>/dev/null | head -1 || true)
-  if [[ -n "$dialog" ]]; then
-    echo "Selecting isolated test library: $HOME/Music"
-    xdotool windowfocus --sync "$dialog"
-    xdotool key --window "$dialog" ctrl+l
-    xdotool type --window "$dialog" --clearmodifiers "$HOME/Music"
-    xdotool key --window "$dialog" Return
-    sleep 1
-    if xdotool search --onlyvisible --name '^Choose music library directory
-  if [[ "$i" == 10 || "$i" == 25 ]]; then
-    xdotool search --onlyvisible --name ".*" getwindowname %@ || true
-  fi
-  sleep 1
-done
-grep -Ei 'Loaded skin "?Studio ?DJ"?' "$out/stdout.log" "$profile/settings/mixxx.log"
-sleep 3
-kill -0 "$pid"
-xdotool search --onlyvisible --name 'Mixxx' > "$out/windows.txt"
-import -window root "$out/player.png"
-# Reject actual skin parser errors; keep the full log for review.
-if grep -Ei 'StudioDJ/.*(unknown widget|could not parse|failed to parse|invalid control|unrecognized widget)|Failed to load skin|Error loading skin|Segmentation fault' "$out/stdout.log" "$profile/settings/mixxx.log"; then exit 1; fi
-echo "PASS: candidate loaded and remained alive on a virtual display (not hardware/audio validation)"
- >/dev/null 2>&1; then
-      xdotool key --window "$dialog" Return
-    fi
-  fi
-  if grep -Ei 'Loaded skin "Studio ?DJ" from .*[/\\]StudioDJ' "$out/stdout.log" "$profile/settings/mixxx.log" 2>/dev/null; then break; fi
-  if [[ "$i" == 10 || "$i" == 25 ]]; then
-    xdotool search --onlyvisible --name ".*" getwindowname %@ || true
-  fi
-  sleep 1
-done
-grep -Ei 'Loaded skin "?Studio ?DJ"?' "$out/stdout.log" "$profile/settings/mixxx.log"
-sleep 3
-kill -0 "$pid"
-xdotool search --onlyvisible --name 'Mixxx' > "$out/windows.txt"
-import -window root "$out/player.png"
-# Reject actual skin parser errors; keep the full log for review.
 if grep -Ei 'StudioDJ/.*(unknown widget|could not parse|failed to parse|invalid control|unrecognized widget)|Failed to load skin|Error loading skin|Segmentation fault' "$out/stdout.log" "$profile/settings/mixxx.log"; then exit 1; fi
 echo "PASS: candidate loaded and remained alive on a virtual display (not hardware/audio validation)"
