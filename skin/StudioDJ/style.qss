@@ -1,43 +1,52 @@
-/* Studio DJ 0.0.3 — native Qt widgets, no custom paint in audio path. */
-QWidget { color:#F5F5F7; font-family:"Segoe UI","Noto Sans",sans-serif; font-size:13px; background:#101012; }
-#Mixxx { background:#101012; qproperty-layoutSpacing:10; padding:12px; }
-WWidgetGroup { border:0; qproperty-layoutSpacing:8; background:transparent; }
-WLabel, WLabel QLabel, WNumber, WNumber QLabel, WNumberRate, WNumberRate QLabel,
-WNumberPos, WNumberPos QLabel, WKey, WKey QLabel, WTrackProperty, WTrackProperty QLabel {
- background:transparent; border:0; color:#F5F5F7;
-}
-#Toolbar { background:#1A1A1E; padding:12px; qproperty-layoutSpacing:12; qproperty-layoutAlignment:'AlignLeft | AlignVCenter'; border:1px solid #2C2C31; border-radius:10px; }
-#Brand, #Brand QLabel { font-size:25px; font-weight:600; color:#F5F5F7; }
-#DeckStrip { qproperty-layoutSpacing:12; }
-#DeckCard { background:#1C1C20; border:1px solid #34343B; border-radius:12px; padding:12px; qproperty-layoutSpacing:7; qproperty-layoutAlignment:'AlignTop'; }
-#DeckHead, #DeckFoot { qproperty-layoutSpacing:10; qproperty-layoutAlignment:'AlignLeft | AlignVCenter'; }
-#TrackTitle, #TrackTitle QLabel { font-size:20px; font-weight:600; color:#F5F5F7; min-height:26px; }
-#Artist, #Artist QLabel { font-size:13px; color:#A0A0A8; min-height:18px; }
-#Caption, #Caption QLabel { font-size:10px; font-weight:500; color:#A1A1AA; }
-#Bpm, #Bpm QLabel { font-size:28px; font-weight:600; color:#FFFFFF; }
-#Metric, #Metric QLabel { font-size:18px; font-weight:500; }
-#MetricBlock { qproperty-layoutSpacing:2; qproperty-layoutAlignment:'AlignLeft | AlignVCenter'; }
-#DeckLabel1, #DeckLabel1 QLabel { color:#0A84FF; font-weight:600; }
-#DeckLabel2, #DeckLabel2 QLabel { color:#FF9F0A; font-weight:600; }
-#DeckLabel3, #DeckLabel3 QLabel { color:#BF5AF2; font-weight:600; }
-#DeckLabel4, #DeckLabel4 QLabel { color:#64D2FF; font-weight:600; }
-#Layer, #Layer QLabel { color:#FFFFFF; font-size:10px; font-weight:600; }
-#Status, #Status QLabel { color:#82828C; font-size:10px; }
-#Status[highlight="1"], #Status[highlight="1"] QLabel { color:#30D158; font-weight:600; }
-#ModeButton,#Button { background:#29292E; color:#E8E8ED; border:1px solid #3B3B44; border-radius:7px; }
-#ModeButton[displayValue="1"] { background:#254E7C; border-color:#0A84FF; }
-#Waveforms { background:#0D0E11; border:1px solid #2E2E34; border-radius:10px; padding:12px; qproperty-layoutSpacing:8; }
-#WaveLane { background:#101116; border-bottom:1px solid #2C2E36; qproperty-layoutSpacing:10; }
-#WaveLane WLabel, #WaveLane WLabel QLabel { font-size:17px; min-width:32px; }
-#BrowseWorkspace { background:#17171A; border:1px solid #2E2E34; border-radius:10px; padding:12px; qproperty-layoutSpacing:8; }
-#LibraryHeader { qproperty-layoutAlignment:'AlignLeft | AlignVCenter'; qproperty-layoutSpacing:10; }
-#SectionTitle, #SectionTitle QLabel { font-size:18px; font-weight:600; }
-QLineEdit { background:#26262B; border:1px solid #42424A; border-radius:7px; padding:8px; color:#F5F5F7; }
-QTableView,QTreeView { background:#19191D; alternate-background-color:#202024; selection-background-color:#244B79; gridline-color:#27272D; border:0; }
-QTableView::item,QTreeView::item { padding:4px; border:0; }
-QHeaderView::section { background:#222227; color:#A7A7AF; padding:8px; border:0; }
-QScrollBar:vertical { background:#17171A; width:10px; margin:0; }
-QScrollBar:horizontal { background:#17171A; height:10px; margin:0; }
-QScrollBar::handle { background:#47474E; border-radius:4px; min-width:20px; min-height:20px; }
-QScrollBar::add-line,QScrollBar::sub-line { width:0; height:0; }
-QSplitter::handle { background:#25252A; width:6px; }
+/* Studio DJ 0.0.4 — native dark performance UI */
+QWidget { color:#F5F5F7; font-family:"Segoe UI"; font-size:13px; }
+#Mixxx { background-color:#101012; qproperty-layoutSpacing:12; qproperty-layoutMargin:14; }
+WWidgetGroup { background:transparent; border:0; qproperty-layoutSpacing:6; }
+WLabel, WNumber, WNumberPos, WNumberRate, WTrackProperty, WKey { background:transparent; border:none; }
+#Toolbar { background:#1C1C20; border:1px solid #303036; border-radius:12px; qproperty-layoutSpacing:16; qproperty-layoutMargin:12; }
+#BrandLockup { qproperty-layoutSpacing:1; }
+#Brand { font-size:28px; font-weight:600; color:#F5F5F7; }
+#Eyebrow { font-size:10px; color:#96969E; font-weight:600; }
+#Caption { font-size:11px; color:#A5A5AE; font-weight:500; }
+#NavButton, #ModeButton, #Button { color:#E9E9ED; background:#2C2C31; border:1px solid #45454C; border-radius:8px; font-size:13px; font-weight:500; }
+#NavButton { background:#F0F0F3; color:#121216; border:0; }
+#NavButton[displayValue="1"] { background:#0A84FF; color:white; }
+#ModeButton[displayValue="1"] { background:#22466F; border-color:#408DDF; }
+#DeckRail, #DeckPair, #FourDecks { qproperty-layoutSpacing:12; }
+#MiniDeck { background:#19191D; border:1px solid #2E2E35; border-radius:9px; qproperty-layoutMargin:8; qproperty-layoutSpacing:7; }
+#RailTitle { font-size:13px; color:#CCCCD2; }
+#DeckCard1, #DeckCard2, #DeckCard3, #DeckCard4 { background:#1C1C20; border:1px solid #333339; border-radius:14px; qproperty-layoutMargin:12; qproperty-layoutSpacing:8; }
+#DeckHeader, #DeckFooter { qproperty-layoutSpacing:9; }
+#TrackBlock { qproperty-layoutSpacing:1; }
+#TrackTitle { font-size:21px; font-weight:600; color:#F5F5F7; }
+#Artist { font-size:14px; color:#A5A5AE; }
+#MetricsRow { qproperty-layoutSpacing:12; }
+#MetricBlock { qproperty-layoutSpacing:0; qproperty-layoutAlignment:'AlignLeft | AlignVCenter'; }
+#Bpm { font-size:37px; font-weight:600; color:#F7F7F8; }
+#Metric, #Pitch, #TimeValue { font-size:18px; font-weight:500; color:#EDEDF0; }
+#DeckNumber1, #RailNumber1 { color:#409CFF; font-weight:600; }
+#DeckNumber2, #RailNumber2 { color:#FFAE45; font-weight:600; }
+#DeckNumber3, #RailNumber3 { color:#BF85F8; font-weight:600; }
+#DeckNumber4, #RailNumber4 { color:#64D2FF; font-weight:600; }
+#DeckNumber1,#DeckNumber2,#DeckNumber3,#DeckNumber4 { font-size:24px; }
+#RailNumber1,#RailNumber2,#RailNumber3,#RailNumber4 { font-size:16px; }
+#ActiveBadge { color:#72727B; font-size:10px; font-weight:600; }
+#ActiveBadge[highlight="1"] { color:#E6E6EC; background:#38383F; border-radius:5px; padding:3px; }
+#Status { font-size:10px; font-weight:600; color:#71717C; }
+#Status[highlight="1"] { color:#46D887; }
+#WavePanel { background:#101115; border:1px solid #30323A; border-radius:9px; qproperty-layoutMargin:6; qproperty-layoutSpacing:4; }
+#CueStrip { qproperty-layoutSpacing:6; }
+#CueSlot { background:#28282E; color:#787884; border-radius:5px; padding-left:6px; font-weight:600; font-size:11px; }
+#CueSlot[highlight="1"] { background:#354C69; color:#B4D7FF; }
+#BrowseWorkspace { background:#19191D; border:1px solid #303036; border-radius:12px; qproperty-layoutMargin:12; qproperty-layoutSpacing:10; }
+#LibraryHeader { qproperty-layoutSpacing:12; }
+#SectionTitle { font-size:25px; font-weight:600; }
+#FXStrip { background:#19191D; border-radius:9px; qproperty-layoutMargin:8; }
+QLineEdit { color:#F5F5F7; background:#26262B; border:1px solid #41414A; border-radius:7px; padding:9px; }
+QTableView,QTreeView { color:#DBDBE1; background:#18181B; alternate-background-color:#202024; selection-background-color:#254A77; gridline-color:#27272C; border:0; }
+QTableView::item,QTreeView::item { padding:5px; border:0; }
+QHeaderView::section { background:#242429; color:#A7A7AF; border:0; padding:8px; }
+QScrollBar:vertical { background:#18181B; width:10px; }
+QScrollBar:horizontal { background:#18181B; height:10px; }
+QScrollBar::handle { background:#494951; border-radius:4px; min-width:20px; min-height:20px; }
+QSplitter::handle { background:#27272D; width:6px; }
