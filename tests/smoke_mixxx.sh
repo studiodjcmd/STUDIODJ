@@ -9,6 +9,8 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_RUNTIME_DIR="$profile/runtime"
 export LIBGL_ALWAYS_SOFTWARE=1
+export JACK_NO_AUDIO_RESERVATION=1
+export JACK_NO_START_SERVER=1
 mkdir -p "$HOME/Music" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_RUNTIME_DIR" "$profile/settings/skins"
 chmod 700 "$XDG_RUNTIME_DIR"
 cp -r "$root/skin/StudioDJ" "$profile/settings/skins/"
@@ -16,6 +18,10 @@ printf '[Config]\nResizableSkin StudioDJ\n' > "$profile/settings/mixxx.cfg"
 cat > "$HOME/.asoundrc" <<'EOF'
 pcm.!default {
   type null
+  hint {
+    show on
+    description "Studio DJ virtual output"
+  }
 }
 ctl.!default {
   type hw
@@ -24,17 +30,37 @@ ctl.!default {
 EOF
 printf 'XDG_MUSIC_DIR="$HOME/Music"\n' > "$XDG_CONFIG_HOME/user-dirs.dirs"
 pid=""
+jackpid=""
 cleanup() {
+  local status=$?
+  if [[ "$status" != 0 ]]; then
+    xdotool search --onlyvisible --name ".*" getwindowname %@ > "$out/windows.txt" 2>&1 || true
+    import -window root "$out/failure.png" || true
+    tail -100 "$out/stdout.log" || true
+    cat "$out/windows.txt" || true
+    tail -40 "$out/jack.log" || true
+  fi
   if [[ -n "$pid" ]]; then kill "$pid" 2>/dev/null || true; wait "$pid" 2>/dev/null || true; fi
   cp "$profile/settings/mixxx.log" "$out/mixxx.log" 2>/dev/null || true
+  if [[ -n "$jackpid" ]]; then kill "$jackpid" 2>/dev/null || true; wait "$jackpid" 2>/dev/null || true; fi
   rm -rf "$profile"
 }
 trap cleanup EXIT
+jackd --no-realtime -d dummy -r 44100 -p 512 > "$out/jack.log" 2>&1 &
+jackpid=$!
+for i in $(seq 1 20); do
+  if jack_lsp > "$out/jack-ports.txt" 2>/dev/null; then break; fi
+  sleep 1
+done
+jack_lsp
 mixxx --settingsPath "$profile/settings" --developer --logLevel debug --logFlushLevel debug > "$out/stdout.log" 2>&1 &
 pid=$!
 for i in $(seq 1 60); do
   kill -0 "$pid" || { cat "$out/stdout.log"; exit 1; }
   if grep -Eiq 'Loaded skin "?Studio ?DJ"?' "$out/stdout.log" "$profile/settings/mixxx.log" 2>/dev/null; then break; fi
+  if [[ "$i" == 10 || "$i" == 25 ]]; then
+    xdotool search --onlyvisible --name ".*" getwindowname %@ || true
+  fi
   sleep 1
 done
 grep -Ei 'Loaded skin "?Studio ?DJ"?' "$out/stdout.log" "$profile/settings/mixxx.log"

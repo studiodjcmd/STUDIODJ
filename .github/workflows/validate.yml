@@ -33,10 +33,10 @@ jobs:
           sudo apt-get update
           version=$(apt-cache madison mixxx | awk '$3 ~ /(^|:)2[.]5[.]6([+~.-]|$)/ {print $3; exit}')
           test -n "$version"
-          sudo apt-get install -y "mixxx=$version" xvfb xdotool imagemagick libgl1-mesa-dri
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "mixxx=$version" xvfb xdotool imagemagick libgl1-mesa-dri jackd2 dbus-x11
           dpkg-query -W mixxx
       - name: Load actual native skin
-        run: xvfb-run -a -s "-screen 0 1366x768x24 +extension GLX" bash tests/smoke_mixxx.sh
+        run: xvfb-run -a -s "-screen 0 1366x768x24 +extension GLX" dbus-run-session -- bash tests/smoke_mixxx.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
